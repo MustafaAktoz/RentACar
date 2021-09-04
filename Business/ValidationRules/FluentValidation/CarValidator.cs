@@ -1,4 +1,5 @@
-﻿using Entities.Concrete;
+﻿using Business.Constants;
+using Entities.Concrete;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace Business.ValidationRules.FluentValidation
         {
             RuleFor(c => c.Name).MinimumLength(2);
             RuleFor(c => c.DailyPrice).GreaterThan(0);
-
+            RuleFor(c => c.DailyPrice).GreaterThanOrEqualTo(100000).When(c => c.BrandId == 1).WithMessage(Messages.LowPriceForThisBrand);
         }
     }
 }

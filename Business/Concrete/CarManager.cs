@@ -6,6 +6,7 @@ using Core.Aspect.Autofac.Caching;
 using Core.Aspect.Autofac.Performance;
 using Core.Aspect.Autofac.Transaction;
 using Core.Aspect.Autofac.Validation;
+using Core.Utilities.Business;
 using Core.Utilities.Result;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -32,6 +33,9 @@ namespace Business.Concrete
         [PerformanceAspect(2)]
         public IResult Add(Car car)
         {
+            var result = BusinessRules.Run(CarNameAlreadyExist(car.Name));
+            if (result!=null) return result;
+
             _carDal.Add(car);
             return new SuccessResult(Messages.Added);
         }
@@ -86,6 +90,15 @@ namespace Business.Concrete
         {
             _carDal.Update(car);
             return new SuccessResult(Messages.Updated);
+        }
+
+
+        private IResult CarNameAlreadyExist(string name)
+        {
+            var result = _carDal.Get(c => c.Name == name);
+            if (result != null) return new ErrorResult(Messages.CarNameAlreadyExist);
+
+            return new SuccessResult();
         }
     }
 }
