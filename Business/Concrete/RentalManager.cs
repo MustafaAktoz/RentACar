@@ -51,7 +51,7 @@ namespace Business.Concrete
         public IDataResult<List<RentalDetailDto>> GetRentalDetails()
         {
             var result = _rentalDal.GetRentalDetails();
-            return new SuccessDataResult<List<RentalDetailDto>>(result,Messages.GetDetails+" "+Messages.Listed);
+            return new SuccessDataResult<List<RentalDetailDto>>(result,Messages.GetDetails+"\n"+Messages.Listed);
         }
 
         public IResult Update(Rental rental)
