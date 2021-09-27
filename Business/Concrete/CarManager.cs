@@ -76,6 +76,12 @@ namespace Business.Concrete
             return new SuccessDataResult<List<CarDetailDto>>(result,Messages.GetDetails);
         }
 
+        public IDataResult<List<CarDetailDto>> GetCarDetailsByColorId(int colorId)
+        {
+            var result = _carDal.GetCarDetails(c => c.ColorId == colorId);
+            return new SuccessDataResult<List<CarDetailDto>>(result, Messages.GetDetails);
+        }
+
         public IDataResult<List<CarDetailDto>> GetCarDetailById(int id)
         {
             var result = _carDal.GetCarDetails(c=>c.Id==id);
@@ -85,14 +91,14 @@ namespace Business.Concrete
         [CacheAspect]
         public IDataResult<List<Car>> GetCarsByBrandId(int brandId)
         {
-            var result = _carDal.GetAll(c => c.Id == brandId);
+            var result = _carDal.GetAll(c => c.BrandId == brandId);
             return new SuccessDataResult<List<Car>>(result,Messages.Filtered);
         }
 
         [CacheAspect]
         public IDataResult<List<Car>> GetCarsByColorId(int colorId)
         {
-            var result = _carDal.GetAll(c => c.Id == colorId);
+            var result = _carDal.GetAll(c => c.ColorId == colorId);
             return new SuccessDataResult<List<Car>>(result,Messages.Filtered);
 
         }
