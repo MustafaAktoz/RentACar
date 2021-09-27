@@ -4,6 +4,7 @@ using Core.Utilities.Business;
 using Core.Utilities.Result;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -47,9 +48,14 @@ namespace Business.Concrete
             return new SuccessDataResult<Rental>(result,Messages.Geted);
         }
 
+        public IDataResult<List<RentalDetailDto>> GetRentalDetails()
+        {
+            var result = _rentalDal.GetRentalDetails();
+            return new SuccessDataResult<List<RentalDetailDto>>(result,Messages.GetDetails+" "+Messages.Listed);
+        }
+
         public IResult Update(Rental rental)
         {
-
             _rentalDal.Update(rental);
             return new SuccessResult(Messages.Updated);
         }
