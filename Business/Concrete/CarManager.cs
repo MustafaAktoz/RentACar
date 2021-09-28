@@ -82,10 +82,10 @@ namespace Business.Concrete
             return new SuccessDataResult<List<CarDetailDto>>(result,Messages.GetDetails+"\n"+Messages.Filtered);
         }
 
-        public IDataResult<List<CarDetailDto>> GetCarDetailById(int id)
+        public IDataResult<CarDetailDto> GetCarDetailById(int id)
         {
-            var result = _carDal.GetCarDetails(c=>c.Id==id);
-            return new SuccessDataResult<List<CarDetailDto>>(result,Messages.GetDetails);
+            var result = _carDal.GetCarDetail(c=>c.Id==id);
+            return new SuccessDataResult<CarDetailDto>(result,Messages.GetDetails);
         }
 
         [CacheAspect]
