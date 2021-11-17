@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Core.Aspect.Autofac.Caching;
 using Core.Aspect.Autofac.Transaction;
 using Core.Utilities.Business;
 using Core.Utilities.Helpers;
@@ -26,6 +27,7 @@ namespace Business.Concrete
         }
 
         [TransactionAspect]
+        [RemoveCacheAspect("ICarService.Get")]
         public IResult Add(int carId,IFormFile file)
         {
             var result = BusinessRules.Run(CarExist(carId),ImageLimitForCar(carId));
@@ -48,6 +50,7 @@ namespace Business.Concrete
         }
 
         [TransactionAspect]
+        [RemoveCacheAspect("ICarService.Get")]
         public IResult Delete(int id)
         {
             var carImage = _carImageDal.Get(ci => ci.Id == id);
@@ -70,6 +73,7 @@ namespace Business.Concrete
         }
 
         [TransactionAspect]
+        [RemoveCacheAspect("ICarService.Get")]
         public IResult Update(int id,IFormFile file)
         {
             var carImage = _carImageDal.Get(ci => ci.Id == id);

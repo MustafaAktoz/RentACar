@@ -7,12 +7,14 @@ using Core.Aspect.Autofac.Performance;
 using Core.Aspect.Autofac.Transaction;
 using Core.Aspect.Autofac.Validation;
 using Core.Utilities.Business;
+using Core.Utilities.Helpers;
 using Core.Utilities.Result;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Business.Concrete
@@ -67,36 +69,40 @@ namespace Business.Concrete
         public IDataResult<List<CarDetailDto>> GetCarDetails()
         {
             var result = _carDal.GetCarDetails();
+            CarImageControl(result);
             return new SuccessDataResult<List<CarDetailDto>>(result,Messages.GetDetails+"\n"+Messages.Listed);
         }
 
         public IDataResult<List<CarDetailDto>> GetCarDetailsByBrandId(int brandId)
         {
             var result = _carDal.GetCarDetails(c=>c.BrandId==brandId);
+            CarImageControl(result);
             return new SuccessDataResult<List<CarDetailDto>>(result,Messages.GetDetails+"\n"+Messages.Filtered);
         }
 
         public IDataResult<List<CarDetailDto>> GetCarDetailsByColorId(int colorId)
         {
             var result = _carDal.GetCarDetails(c => c.ColorId == colorId);
+            CarImageControl(result);
             return new SuccessDataResult<List<CarDetailDto>>(result,Messages.GetDetails+"\n"+Messages.Filtered);
         }
 
         public IDataResult<CarDetailDto> GetCarDetailById(int id)
         {
             var result = _carDal.GetCarDetail(c=>c.Id==id);
+            CarImageControlForSingleData(result);
             return new SuccessDataResult<CarDetailDto>(result,Messages.GetDetails);
         }
 
         [CacheAspect]
-        public IDataResult<List<Car>> GetCarsByBrandId(int brandId)
+        public IDataResult<List<Car>> GetByBrandId(int brandId)
         {
             var result = _carDal.GetAll(c => c.BrandId == brandId);
             return new SuccessDataResult<List<Car>>(result,Messages.Filtered);
         }
 
         [CacheAspect]
-        public IDataResult<List<Car>> GetCarsByColorId(int colorId)
+        public IDataResult<List<Car>> GetByColorId(int colorId)
         {
             var result = _carDal.GetAll(c => c.ColorId == colorId);
             return new SuccessDataResult<List<Car>>(result,Messages.Filtered);
@@ -115,6 +121,27 @@ namespace Business.Concrete
         {
             var result = _carDal.Get(c => c.Name == name);
             if (result != null) return new ErrorResult(Messages.CarNameAlreadyExist);
+
+            return new SuccessResult();
+        }
+
+        private IResult CarImageControl(List<CarDetailDto> carDetailsDto)
+        {
+            foreach (var carDetailDto in carDetailsDto)
+            {
+                if (!carDetailDto.CarImages.Any())
+                {
+                    carDetailDto.CarImages.Add(new CarImage { ImagePath = ImageHelper.DefaultImagePath });
+                }
+            }
+
+            return new SuccessResult();
+        }
+
+        private IResult CarImageControlForSingleData(CarDetailDto carDetailDto)
+        {
+            if (carDetailDto.CarImages.Any())
+                carDetailDto.CarImages.Add(new CarImage { ImagePath = ImageHelper.DefaultImagePath });
 
             return new SuccessResult();
         }
