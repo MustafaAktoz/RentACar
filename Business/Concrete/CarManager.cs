@@ -140,7 +140,7 @@ namespace Business.Concrete
 
         private IResult CarImageControlForSingleData(CarDetailDto carDetailDto)
         {
-            if (carDetailDto.CarImages.Any())
+            if (!carDetailDto.CarImages.Any())
                 carDetailDto.CarImages.Add(new CarImage { ImagePath = ImageHelper.DefaultImagePath });
 
             return new SuccessResult();
