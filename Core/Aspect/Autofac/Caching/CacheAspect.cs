@@ -13,11 +13,11 @@ namespace Core.Aspect.Autofac.Caching
     public class CacheAspect:MethodInterception
     {
         double _duration;
-        ICacheManager _cacheManager;
+        ICacheService _cacheService;
         public CacheAspect(int duration=60)
         {
             _duration = duration;
-            _cacheManager = ServiceTool.ServiceProvider.GetService<ICacheManager>();
+            _cacheService = ServiceTool.ServiceProvider.GetService<ICacheService>();
         }
 
         public override void Intercept(IInvocation invocation)
@@ -25,13 +25,13 @@ namespace Core.Aspect.Autofac.Caching
             var methodName = $"{invocation.Method.ReflectedType.FullName}.{invocation.Method.Name}";
             var arguments = invocation.Arguments;
             var key = $"{methodName}({string.Join(',', arguments.Select(x => x?.ToString() ?? "<Null>"))})";
-            if (_cacheManager.IsAdd(key))
+            if (_cacheService.IsAdd(key))
             {
-                invocation.ReturnValue = _cacheManager.Get(key);
+                invocation.ReturnValue = _cacheService.Get(key);
                 return;
             }
             invocation.Proceed();
-            _cacheManager.Add(key, invocation.ReturnValue, _duration);
+            _cacheService.Add(key, invocation.ReturnValue, _duration);
 
         }
     }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Core.CrossCuttingConcerns.Caching
 {
-    public interface ICacheManager
+    public interface ICacheService
     {
         void Add(string key, object value, double duration);
         bool IsAdd(string key);
