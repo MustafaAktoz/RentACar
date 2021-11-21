@@ -16,7 +16,7 @@ namespace Business.Constants
         public static string Listed = "Başarıyla listelendi";
         public static string Filtered = "Başarıyla filtrelendi";
         public static string Geted="Başarıyla getirildi";
-        public static string GetDetails = "Detaylar getirildi";
+        public static string DetailsGeted = "Detaylar getirildi";
         public static string CanMustBeDelivered = "Araba henüz teslim edilmedi";
         public static string TokenCreated="Token başarıyla oluşturuldu";
         public static string RegistrationSuccessful = "Kayıt başarılı";
