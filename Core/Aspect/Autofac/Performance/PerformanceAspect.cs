@@ -11,9 +11,9 @@ namespace Core.Aspect.Autofac.Performance
 {
     public class PerformanceAspect:MethodInterception
     {
-        int _interval;
+        double _interval;
         Stopwatch _stopwatch;
-        public PerformanceAspect(int interval)
+        public PerformanceAspect(double interval)
         {
             _interval = interval;
             _stopwatch = ServiceTool.ServiceProvider.GetService<Stopwatch>();
