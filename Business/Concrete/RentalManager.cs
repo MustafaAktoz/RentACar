@@ -7,6 +7,7 @@ using Entities.Concrete;
 using Entities.DTOs;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Business.Concrete
@@ -22,7 +23,10 @@ namespace Business.Concrete
 
         public IResult Add(Rental rental)
         {
-            var result=BusinessRules.Run(CarMustBeDelivered(rental));
+            var result=BusinessRules.Run(CarMustBeDelivered(rental), 
+                RentDateControl(rental),
+                NotBefore(rental.RentDate),
+                NotBeforeRentDate(rental));
             if (result != null) return result;
 
             _rentalDal.Add(rental);
@@ -62,11 +66,42 @@ namespace Business.Concrete
 
         private IResult CarMustBeDelivered(Rental rental)
         {
-            var result = _rentalDal.Get(r => r.CarId == rental.CarId&&r.ReturnDate==null);
+            var result = _rentalDal.Get(r => r.CarId == rental.CarId
+            &&r.ReturnDate==null
+            &&r.RentDate<=rental.ReturnDate);
             if(result!=null)
             {
                 return new ErrorResult(Messages.CanMustBeDelivered);
             }
+
+            return new SuccessResult();
+        }
+
+        private IResult RentDateControl(Rental rental)
+        {
+            var result = _rentalDal.GetAll(r => r.CarId == rental.CarId
+            && r.RentDate.Date >= rental.RentDate
+            &&(rental.ReturnDate==null?true:r.RentDate<=rental.ReturnDate));
+            if (result.Any())
+            {
+                return new ErrorResult(Messages.DateRangeError);
+            }
+
+            return new SuccessResult();
+        }
+
+        private IResult NotBefore(DateTime rentDate)
+        {
+            if (rentDate < DateTime.Now)
+                return new ErrorResult(Messages.NotBefore);
+
+            return new SuccessResult();
+        }
+
+        private IResult NotBeforeRentDate(Rental rental)
+        {
+            if (rental.RentDate > rental.ReturnDate)
+                return new ErrorResult(Messages.NotBeforeRentDate);
 
             return new SuccessResult();
         }

@@ -30,5 +30,8 @@ namespace Business.Constants
         public static string CarNotFound = "Bu idye ait bir araba bulunamadı";
         public static string LowPriceForThisBrand = "Bu marka için düşük bir fiyat girdiniz";
         public static string CarNameAlreadyExist = "Bu isimde bir araba zaten var";
+        public static string DateRangeError="Bu tarihler arasında araba zaten kiralanmış";
+        public static string NotBefore="Şuandan önceki bir tarihe kiralama yapılamaz";
+        public static string NotBeforeRentDate="Teslim tarihi kiralama tarihinden önce olamaz";
     }
 }
