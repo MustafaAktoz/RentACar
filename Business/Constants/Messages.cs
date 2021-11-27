@@ -33,5 +33,6 @@ namespace Business.Constants
         public static string DateRangeError="Bu tarihler arasında araba zaten kiralanmış";
         public static string NotBefore="Şuandan önceki bir tarihe kiralama yapılamaz";
         public static string NotBeforeRentDate="Teslim tarihi kiralama tarihinden önce olamaz";
+        public static string PaymentSuccessful="Ödeme başarılı";
     }
 }
