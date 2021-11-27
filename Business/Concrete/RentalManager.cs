@@ -23,7 +23,7 @@ namespace Business.Concrete
 
         public IResult Add(Rental rental)
         {
-            var result=BusinessRules.Run(RulesForAdd(rental));
+            var result=RulesForAdd(rental);
             if (!result.Success) return result;
 
             _rentalDal.Add(rental);
