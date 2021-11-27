@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Core.Aspect.Autofac.Transaction;
 using Core.Utilities.Business;
 using Core.Utilities.Result;
 using DataAccess.Abstract;
@@ -15,18 +16,25 @@ namespace Business.Concrete
     public class RentalManager : IRentalService
     {
         IRentalDal _rentalDal;
+        IPaymentService _paymentService;
 
-        public RentalManager(IRentalDal rentalDal)
+        public RentalManager(IRentalDal rentalDal, IPaymentService paymentService)
         {
             _rentalDal = rentalDal;
+            _paymentService = paymentService;
         }
 
-        public IResult Add(Rental rental)
+        [TransactionAspect]
+        public IResult Add(Rental rental,Payment payment)
         {
             var result=RulesForAdd(rental);
             if (!result.Success) return result;
 
             _rentalDal.Add(rental);
+
+            var paymentResult = _paymentService.Add(payment);
+            if (!paymentResult.Success) throw new Exception(paymentResult.Message);
+
             return new SuccessResult(Messages.RentalSuccessful);
         }
 

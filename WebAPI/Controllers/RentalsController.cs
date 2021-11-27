@@ -21,14 +21,13 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("add")]
-        public IActionResult Add(Rental rental)
+        public IActionResult Add(Rental rental,Payment payment)
         {
-            var result=_rentalService.Add(rental);
+            var result=_rentalService.Add(rental,payment);
             if (!result.Success) return BadRequest(result.Message);
 
             return Ok(result);            
         }
-
         [HttpPost("update")]
         public IActionResult Update(Rental rental)
         {
