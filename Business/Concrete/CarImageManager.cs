@@ -20,7 +20,7 @@ namespace Business.Concrete
         ICarImageDal _carImageDal;
         ICarService _carService;
 
-        public CarImageManager(ICarImageDal carImageDal,ICarService carService)
+        public CarImageManager(ICarImageDal carImageDal, ICarService carService)
         {
             _carImageDal = carImageDal;
             _carService = carService;
@@ -28,24 +28,19 @@ namespace Business.Concrete
 
         [TransactionAspect]
         [RemoveCacheAspect("ICarService.Get")]
-        public IResult Add(int carId,IFormFile file)
+        public IResult Add(int carId, IFormFile file)
         {
-            var result = BusinessRules.Run(CarExist(carId),ImageLimitForCar(carId));
+            var result = BusinessRules.Run(CarExist(carId), ImageLimitForCar(carId));
             if (result != null) return result;
 
             CarImage carImage = new CarImage
             {
                 CarId = carId,
-                ImagePath = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName),
+                ImagePath = ImageHelper.Upload(file),
                 Date = DateTime.Now
             };
-            
 
             _carImageDal.Add(carImage);
-
-            var imageUploadResult=ImageHelper.Upload(carImage.ImagePath,file);
-            if (!imageUploadResult.Success) throw new Exception(imageUploadResult.Message);
-
             return new SuccessResult(Messages.Added);
         }
 
@@ -56,46 +51,36 @@ namespace Business.Concrete
             var carImage = _carImageDal.Get(ci => ci.Id == id);
             if (carImage == null) return new ErrorResult(Messages.NoImagesFoundForThisId);
 
+            ImageHelper.Delete(carImage.ImagePath);
+
             _carImageDal.Delete(carImage);
-
-            var imageDeleteResult =ImageHelper.Delete(carImage.ImagePath);
-            if (!imageDeleteResult.Success) throw new Exception(imageDeleteResult.Message);
-
             return new SuccessResult(Messages.Deleted);
         }
 
         public IDataResult<List<CarImage>> GetByCarId(int carId)
         {
-            var result=_carImageDal.GetAll(ci=>ci.CarId==carId);
+            var result = _carImageDal.GetAll(ci => ci.CarId == carId);
             if (result.Count == 0) result.Add(new CarImage { ImagePath = ImageHelper.DefaultImagePath });
 
-            return new SuccessDataResult<List<CarImage>>(result,Messages.Listed);
+            return new SuccessDataResult<List<CarImage>>(result, Messages.Listed);
         }
 
         [TransactionAspect]
         [RemoveCacheAspect("ICarService.Get")]
-        public IResult Update(int id,IFormFile file)
+        public IResult Update(int id, IFormFile file)
         {
             var carImage = _carImageDal.Get(ci => ci.Id == id);
             if (carImage == null) return new ErrorResult(Messages.NoImagesFoundForThisId);
 
+            carImage.ImagePath = ImageHelper.Update(carImage.ImagePath, file);
+
             _carImageDal.Update(carImage);
-
-            var imageUpdateResult = ImageHelper.Update(carImage.ImagePath,file);
-            if (!imageUpdateResult.Success) throw new Exception(imageUpdateResult.Message);
-
             return new SuccessResult(Messages.Updated);
-        }
-
-
-        public IResult DefaultImageUpdate(IFormFile file)
-        {
-            return ImageHelper.Update(ImageHelper.DefaultImagePath, file);
         }
 
         private IResult ImageLimitForCar(int carId)
         {
-            var result = _carImageDal.GetAll(ci=>ci.CarId==carId);
+            var result = _carImageDal.GetAll(ci => ci.CarId == carId);
             if (result.Count >= 5) return new ErrorResult(Messages.MaximumImageLimitExceeded);
 
             return new SuccessResult();
@@ -109,6 +94,5 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
-        
     }
 }

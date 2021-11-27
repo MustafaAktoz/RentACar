@@ -11,56 +11,52 @@ namespace Core.Utilities.Helpers
 {
     public class ImageHelper
     {
-        static string _path = Directory.GetCurrentDirectory() + "\\wwwroot\\"+"images\\";
-        public static string DefaultImagePath = "default.png";
-        public static IResult Upload(string imagePath,IFormFile file)
-        {
-            var result = BusinessRules.Run(CheckImage(Path.GetExtension(file.FileName)));
-            if (result != null) return result;
 
-            if (!Directory.Exists(_path))
-            {
-                Directory.CreateDirectory(_path);
-            }
-            using (FileStream fileStream = File.Create(_path + imagePath))
+        static string _folder = "\\images\\";
+        static string _folderName = _folder.Replace('\\', '/');
+        static string _path = Directory.GetCurrentDirectory() + "\\wwwroot";
+        public static string DefaultImagePath = _folderName + "default.png";
+
+        public static string Upload(IFormFile file)
+        {
+            CheckImage(Path.GetExtension(file.FileName));
+
+            string imagePath = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+
+            if (!Directory.Exists(_path + _folder)) Directory.CreateDirectory(_path + _folder);
+
+            using (FileStream fileStream = File.Create(_path + _folder + imagePath))
             {
                 file.CopyTo(fileStream);
                 fileStream.Flush();
-                return new SuccessResult();
+                return _folderName + imagePath;
             }
         }
 
-        public static IResult Update(string imagePath,IFormFile file)
+        public static string Update(string oldImagePath, IFormFile file)
         {
-            Upload(imagePath,file);
-            return new SuccessResult();
+            Delete(oldImagePath);
+            return Upload(file);
         }
 
-        public static IResult Delete(string imagePath)
+        public static void Delete(string imagePath)
         {
-            var result=BusinessRules.Run(DefaultImageCannotBeDeleted(imagePath));
-            if (result != null) return result;
-            
-            File.Delete(_path+imagePath);
-            return new SuccessResult();
+            DefaultImageCannotBeDeleted(imagePath);
+            File.Delete(_path + imagePath);
         }
 
-
-        private static IResult CheckImage(string extension)
+        private static void CheckImage(string extension)
         {
-            if(extension==".jpg"||extension==".png"||extension==".jpeg")
-            {
-                return new SuccessResult();
-            }
+            var extensions = new List<string> { ".jpg", ".png", "jpeg" };
 
-            return new ErrorResult(CoreMessages.ThisIsNotImage);
+            if (!extensions.Contains(extension))
+                throw new Exception(CoreMessages.ThisIsNotImage);
         }
 
-        private static IResult DefaultImageCannotBeDeleted(string imagePath)
+        private static void DefaultImageCannotBeDeleted(string imagePath)
         {
-            if (imagePath == DefaultImagePath) return new ErrorResult(CoreMessages.DefaultImageCannotBeDeleted);
-
-            return new SuccessResult();
+            if (imagePath == DefaultImagePath) 
+                throw new Exception(CoreMessages.DefaultImageCannotBeDeleted);
         }
     }
 }

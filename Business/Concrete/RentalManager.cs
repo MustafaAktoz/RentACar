@@ -23,11 +23,8 @@ namespace Business.Concrete
 
         public IResult Add(Rental rental)
         {
-            var result=BusinessRules.Run(CarMustBeDelivered(rental), 
-                RentDateControl(rental),
-                NotBefore(rental.RentDate),
-                NotBeforeRentDate(rental));
-            if (result != null) return result;
+            var result=BusinessRules.Run(RulesForAdd(rental));
+            if (!result.Success) return result;
 
             _rentalDal.Add(rental);
             return new SuccessResult(Messages.Added);
@@ -102,6 +99,17 @@ namespace Business.Concrete
         {
             if (rental.RentDate > rental.ReturnDate)
                 return new ErrorResult(Messages.NotBeforeRentDate);
+
+            return new SuccessResult();
+        }
+
+        public IResult RulesForAdd(Rental rental)
+        {
+            var result = BusinessRules.Run(CarMustBeDelivered(rental),
+               RentDateControl(rental),
+               NotBefore(rental.RentDate),
+               NotBeforeRentDate(rental));
+            if (result != null) return result;
 
             return new SuccessResult();
         }

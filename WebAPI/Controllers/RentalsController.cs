@@ -55,5 +55,14 @@ namespace WebAPI.Controllers
 
             return Ok(result);
         }
+
+        [HttpPost("rulesforadd")]
+        public IActionResult RulesForAdd(Rental rental)
+        {
+            var result = _rentalService.RulesForAdd(rental);
+            if (!result.Success) return BadRequest(result.Message);
+
+            return Ok(result);
+        }
     }
 }
