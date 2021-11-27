@@ -27,7 +27,7 @@ namespace Business.Concrete
             if (!result.Success) return result;
 
             _rentalDal.Add(rental);
-            return new SuccessResult(Messages.Added);
+            return new SuccessResult(Messages.RentalSuccessful);
         }
 
         public IResult Delete(Rental rental)
