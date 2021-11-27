@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -21,9 +22,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("add")]
-        public IActionResult Add(Rental rental,Payment payment)
+        public IActionResult Add(RentDto rentDto)
         {
-            var result=_rentalService.Add(rental,payment);
+            var result=_rentalService.Add(rentDto.Rental,rentDto.Payment);
             if (!result.Success) return BadRequest(result.Message);
 
             return Ok(result);            
