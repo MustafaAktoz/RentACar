@@ -1,4 +1,5 @@
-﻿using Core.Utilities.Business;
+﻿using Core.Exceptions;
+using Core.Utilities.Business;
 using Core.Utilities.Messages;
 using Core.Utilities.Result;
 using Microsoft.AspNetCore.Http;
@@ -50,13 +51,13 @@ namespace Core.Utilities.Helpers
             var extensions = new List<string> { ".jpg", ".png", "jpeg" };
 
             if (!extensions.Contains(extension))
-                throw new Exception(CoreMessages.ThisIsNotImage);
+                throw new ImageHelperException(CoreMessages.ThisIsNotImage);
         }
 
         private static void DefaultImageCannotBeDeleted(string imagePath)
         {
             if (imagePath == DefaultImagePath) 
-                throw new Exception(CoreMessages.DefaultImageCannotBeDeleted);
+                throw new ImageHelperException(CoreMessages.DefaultImageCannotBeDeleted);
         }
     }
 }
