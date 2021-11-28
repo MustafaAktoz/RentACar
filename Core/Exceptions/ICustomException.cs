@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Core.Exceptions
 {
-    public interface ISimpleCustomException
+    public interface ICustomException
     {
     }
 }

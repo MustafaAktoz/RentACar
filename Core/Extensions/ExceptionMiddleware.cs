@@ -37,7 +37,7 @@ namespace Core.Extensions
 
             if (e.GetType() == typeof(ValidationException)) return ValidationExceptionAsync(httpContext, e);
           
-            if (typeof(ISimpleCustomException).IsAssignableFrom(e.GetType())) SimpleCustomException(out message, httpContext, e);
+            if (typeof(ICustomException).IsAssignableFrom(e.GetType())) SimpleCustomException(out message, httpContext, e);
 
             return httpContext.Response.WriteAsync(new ErrorDetails
             {
