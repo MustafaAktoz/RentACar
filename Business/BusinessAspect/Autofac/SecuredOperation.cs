@@ -9,6 +9,7 @@ using Castle.DynamicProxy;
 using Core.Extensions;
 using Business.Constants;
 using Core.Utilities.Messages;
+using Core.Exceptions;
 
 namespace Business.BusinessAspect.Autofac
 {
@@ -33,7 +34,7 @@ namespace Business.BusinessAspect.Autofac
                 }
             }
 
-            throw new Exception(AspectMessages.AuthorizationDenied);
+            throw new AuthorizationException(AspectMessages.AuthorizationDenied);
         }
     }
 }
