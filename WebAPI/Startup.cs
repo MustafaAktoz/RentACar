@@ -67,7 +67,7 @@ namespace WebAPI
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCustomExceptionMiddleware();
+            app.UseConfigureCustomExceptionMiddleware();
 
             app.UseCors(response =>
             response.WithOrigins("http://localhost:4200").AllowAnyHeader()

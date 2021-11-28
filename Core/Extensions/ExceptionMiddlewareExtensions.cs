@@ -7,7 +7,7 @@ namespace Core.Extensions
 {
     public static class ExceptionMiddlewareExtensions
     {
-        public static void UseCustomExceptionMiddleware(this IApplicationBuilder applicationBuilder)
+        public static void UseConfigureCustomExceptionMiddleware(this IApplicationBuilder applicationBuilder)
         {
             applicationBuilder.UseMiddleware<ExceptionMiddleware>();
         }
