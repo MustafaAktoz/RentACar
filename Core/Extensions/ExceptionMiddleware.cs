@@ -35,9 +35,9 @@ namespace Core.Extensions
             httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
             string message = "Internal Server Error";
 
-            if (e.GetType() == typeof(ValidationException)) return ValidationExceptionAsync(httpContext, e);
+            if (e.GetType() == typeof(ValidationException)) return ConfigureByValidationExceptionAsync(httpContext, e);
           
-            if (typeof(ICustomException).IsAssignableFrom(e.GetType())) SimpleCustomException(out message, httpContext, e);
+            if (typeof(ICustomException).IsAssignableFrom(e.GetType())) ConfigureByCustomException(out message, httpContext, e);
 
             return httpContext.Response.WriteAsync(new ErrorDetails
             {
@@ -46,7 +46,7 @@ namespace Core.Extensions
             }.ToString());
         }
 
-        private Task ValidationExceptionAsync(HttpContext httpContext,Exception e)
+        private Task ConfigureByValidationExceptionAsync(HttpContext httpContext,Exception e)
         {
             httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
             return httpContext.Response.WriteAsync(new ValidationErrorDetails
@@ -57,7 +57,7 @@ namespace Core.Extensions
             }.ToString());
         }
 
-        private void SimpleCustomException(out string message, HttpContext httpContext, Exception e)
+        private void ConfigureByCustomException(out string message, HttpContext httpContext, Exception e)
         {
             httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
             message = e.Message;
