@@ -26,7 +26,7 @@ namespace Business.Constants
         public static string UserAlreadyExist = "Kullanıcı zaten var";
         public static string MaximumImageLimitExceeded = "Bu araba için daha fazla resim eklenemez";
         public static string NoImagesFoundForThisCar = "Bu arabaya ait hiç resim bulunamadı";
-        public static string NoImagesFoundForThisId="Bu idye ait hiç resim bulunamadı";
+        public static string ImageNotFound="Resim bulunamadı";
         public static string CarNotFound = "Bu idye ait bir araba bulunamadı";
         public static string LowPriceForThisBrand = "Bu marka için düşük bir fiyat girdiniz";
         public static string CarNameAlreadyExist = "Bu isimde bir araba zaten var";

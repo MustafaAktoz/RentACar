@@ -49,7 +49,7 @@ namespace Business.Concrete
         public IResult Delete(int id)
         {
             var carImage = _carImageDal.Get(ci => ci.Id == id);
-            if (carImage == null) return new ErrorResult(Messages.NoImagesFoundForThisId);
+            if (carImage == null) return new ErrorResult(Messages.ImageNotFound);
 
             ImageHelper.Delete(carImage.ImagePath);
 
@@ -70,7 +70,7 @@ namespace Business.Concrete
         public IResult Update(int id, IFormFile file)
         {
             var carImage = _carImageDal.Get(ci => ci.Id == id);
-            if (carImage == null) return new ErrorResult(Messages.NoImagesFoundForThisId);
+            if (carImage == null) return new ErrorResult(Messages.ImageNotFound);
 
             carImage.ImagePath = ImageHelper.Update(carImage.ImagePath, file);
 
