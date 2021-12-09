@@ -10,5 +10,7 @@ namespace Business.Abstract
     {
         IResult Add(Payment payment);
         IDataResult<List<Payment>> GetByCustomerId(int customerId);
+
+        IResult Pay(Payment payment);
     }
 }

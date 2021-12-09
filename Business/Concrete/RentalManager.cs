@@ -30,7 +30,7 @@ namespace Business.Concrete
             var result=RulesForAdd(rental);
             if (!result.Success) return result;
 
-            var paymentResult = _paymentService.Add(payment);
+            var paymentResult = _paymentService.Pay(payment);
             if (!paymentResult.Success) return new SuccessResult(paymentResult.Message);
 
             _rentalDal.Add(rental);

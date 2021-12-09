@@ -21,13 +21,18 @@ namespace Business.Concrete
         public IResult Add(Payment payment)
         {
             _paymentDal.Add(payment);
-            return new SuccessResult(Messages.PaymentSuccessful);
+            return new SuccessResult(Messages.Added);
         }
 
         public IDataResult<List<Payment>> GetByCustomerId(int customerId)
         {
             var result= _paymentDal.GetAll(p=>p.CustomerId==customerId);
             return new SuccessDataResult<List<Payment>>(Messages.Listed);
+        }
+
+        public IResult Pay(Payment payment)
+        {
+            return new SuccessResult(Messages.PaymentSuccessful);
         }
     }
 }
