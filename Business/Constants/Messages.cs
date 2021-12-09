@@ -35,5 +35,6 @@ namespace Business.Constants
         public static string NotBeforeRentDate="Teslim tarihi kiralama tarihinden önce olamaz";
         public static string PaymentSuccessful="Ödeme başarılı";
         public static string RentalSuccessful="Kiralama başarılı";
+        public static string PasswordChangedSuccessfully="Şifre başarıyla değiştirildi";
     }
 }

@@ -44,5 +44,14 @@ namespace WebAPI.Controllers
 
             return Ok(token);
         }
+
+        [HttpPost("changepassword")]
+        public IActionResult ChangePassword(ChangePasswordDto changePasswordDto)
+        {
+            var result = _authService.ChangePassword(changePasswordDto);
+            if (!result.Success) return BadRequest(result.Message);
+
+            return Ok(result);
+        }
     }
 }

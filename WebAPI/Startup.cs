@@ -70,7 +70,7 @@ namespace WebAPI
             app.UseConfigureCustomExceptionMiddleware();
 
             app.UseCors(response =>
-            response.WithOrigins("http://localhost:4200").AllowAnyHeader()
+            response.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowCredentials()
             );
 
             app.UseHttpsRedirection();
