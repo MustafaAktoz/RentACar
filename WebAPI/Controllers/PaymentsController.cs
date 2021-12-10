@@ -29,10 +29,10 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
 
-        [HttpGet("getbycustomerid")]
-        public IActionResult GetByCustomerId(int customerId)
+        [HttpGet("getbyuserid")]
+        public IActionResult GetByUserId(int userId)
         {
-            var result = _paymentService.GetByCustomerId(customerId);
+            var result = _paymentService.GetByUserId(userId);
             if (!result.Success) return BadRequest(result.Message);
 
             return Ok(result);
