@@ -43,11 +43,16 @@ namespace Business.Concrete
             return new SuccessDataResult<Customer>(result, Messages.Geted);
         }
 
+        public IDataResult<Customer> GetByUserId(int userId)
+        {
+            var result = _customerDal.Get(c => c.UserId == userId);
+            return new SuccessDataResult<Customer>(result, Messages.Geted);
+        }
+
         public IResult Update(Customer customer)
         {
             _customerDal.Update(customer);
             return new SuccessResult(Messages.Updated);
-
         }
     }
 }
