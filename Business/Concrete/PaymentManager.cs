@@ -27,7 +27,7 @@ namespace Business.Concrete
         public IDataResult<List<Payment>> GetByUserId(int userId)
         {
             var result= _paymentDal.GetAll(p=>p.UserId== userId);
-            return new SuccessDataResult<List<Payment>>(Messages.Listed);
+            return new SuccessDataResult<List<Payment>>(result,Messages.Listed);
         }
 
         public IResult Pay(Payment payment)
