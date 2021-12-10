@@ -31,6 +31,7 @@ namespace DataAccess.Concrete.EntityFramework
                                  DailyPrice = car.DailyPrice,
                                  ModelYear = car.ModelYear,
                                  Description = car.Description,
+                                 FindeksPoint = car.FindeksPoint,
                                  CarImages = context.CarImages.Where(i => i.CarId == car.Id).ToList()
                              };
                 return result.SingleOrDefault();
@@ -54,6 +55,7 @@ namespace DataAccess.Concrete.EntityFramework
                                  DailyPrice = car.DailyPrice,
                                  ModelYear = car.ModelYear,
                                  Description = car.Description,
+                                 FindeksPoint = car.FindeksPoint,
                                  CarImages = context.CarImages.Where(i => i.CarId == car.Id).ToList()
                              
                              };
