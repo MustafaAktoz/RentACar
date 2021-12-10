@@ -36,5 +36,6 @@ namespace Business.Constants
         public static string PaymentSuccessful="Ödeme başarılı";
         public static string RentalSuccessful="Kiralama başarılı";
         public static string PasswordChangedSuccessfully="Şifre başarıyla değiştirildi";
+        public static string NotEnoughFindeksPoints="Findeks puanı yetersiz";
     }
 }

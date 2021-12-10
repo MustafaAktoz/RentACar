@@ -17,17 +17,21 @@ namespace Business.Concrete
     {
         IRentalDal _rentalDal;
         IPaymentService _paymentService;
+        ICustomerService _customerService;
+        ICarService _carService;
 
-        public RentalManager(IRentalDal rentalDal, IPaymentService paymentService)
+        public RentalManager(IRentalDal rentalDal, IPaymentService paymentService, ICustomerService customerService, ICarService carService)
         {
             _rentalDal = rentalDal;
             _paymentService = paymentService;
+            _customerService = customerService;
+            _carService = carService;
         }
 
         [TransactionAspect]
-        public IResult Add(Rental rental,Payment payment)
+        public IResult Add(Rental rental, Payment payment)
         {
-            var result=RulesForAdd(rental);
+            var result = RulesForAdd(rental);
             if (!result.Success) return result;
 
             var paymentResult = _paymentService.Pay(payment);
@@ -48,19 +52,19 @@ namespace Business.Concrete
         public IDataResult<List<Rental>> GetAll()
         {
             var result = _rentalDal.GetAll();
-            return new SuccessDataResult<List<Rental>>(result,Messages.Listed);
+            return new SuccessDataResult<List<Rental>>(result, Messages.Listed);
         }
 
         public IDataResult<Rental> GetById(int id)
         {
             var result = _rentalDal.Get(r => r.Id == id);
-            return new SuccessDataResult<Rental>(result,Messages.Geted);
+            return new SuccessDataResult<Rental>(result, Messages.Geted);
         }
 
         public IDataResult<List<RentalDetailDto>> GetRentalDetails()
         {
             var result = _rentalDal.GetRentalDetails();
-            return new SuccessDataResult<List<RentalDetailDto>>(result,Messages.DetailsGeted+"\n"+Messages.Listed);
+            return new SuccessDataResult<List<RentalDetailDto>>(result, Messages.DetailsGeted + "\n" + Messages.Listed);
         }
 
         public IResult Update(Rental rental)
@@ -72,9 +76,9 @@ namespace Business.Concrete
         private IResult CarMustBeDelivered(Rental rental)
         {
             var result = _rentalDal.Get(r => r.CarId == rental.CarId
-            &&r.ReturnDate==null
-            &&r.RentDate<=rental.ReturnDate);
-            if(result!=null)
+            && r.ReturnDate == null
+            && r.RentDate <= rental.ReturnDate);
+            if (result != null)
             {
                 return new ErrorResult(Messages.CanMustBeDelivered);
             }
@@ -86,7 +90,7 @@ namespace Business.Concrete
         {
             var result = _rentalDal.GetAll(r => r.CarId == rental.CarId
             && r.RentDate.Date >= rental.RentDate
-            &&(rental.ReturnDate==null?true:r.RentDate<=rental.ReturnDate));
+            && (rental.ReturnDate == null ? true : r.RentDate <= rental.ReturnDate));
             if (result.Any())
             {
                 return new ErrorResult(Messages.DateRangeError);
@@ -111,12 +115,29 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
+        private IResult FindeksControl(int customerId, int carId)
+        {
+            var car = _carService.GetById(carId);
+            if (!car.Success) return new ErrorResult(car.Message);
+
+            var customer = _customerService.GetById(customerId);
+            if (!customer.Success) return new ErrorResult(customer.Message);
+
+            if (customer.Data.FindeksPoint < car.Data.FindeksPoint) return new ErrorResult(Messages.NotEnoughFindeksPoints);
+
+            return new SuccessResult();
+        }
+
         public IResult RulesForAdd(Rental rental)
         {
-            var result = BusinessRules.Run(CarMustBeDelivered(rental),
+            var result = BusinessRules.Run(
+               FindeksControl(rental.CustomerId, rental.CarId),
+               CarMustBeDelivered(rental),
                RentDateControl(rental),
                NotBefore(rental.RentDate),
-               NotBeforeRentDate(rental));
+               NotBeforeRentDate(rental)
+               );
+
             if (result != null) return result;
 
             return new SuccessResult();
