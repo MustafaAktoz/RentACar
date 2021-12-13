@@ -29,7 +29,7 @@ namespace Business.Concrete
             if (result != null) return result;
 
             _paymentDal.Add(payment);
-            return new SuccessResult(Messages.Added);
+            return new SuccessResult(Messages.CardSaved);
         }
 
         public IDataResult<List<Payment>> GetByUserId(int userId)
