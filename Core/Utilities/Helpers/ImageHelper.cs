@@ -12,25 +12,26 @@ namespace Core.Utilities.Helpers
 {
     public class ImageHelper
     {
-
+        static string _simplePath = Directory.GetCurrentDirectory() + "\\wwwroot";
         static string _folder = "\\images\\";
         static string _folderName = _folder.Replace('\\', '/');
-        static string _path = Directory.GetCurrentDirectory() + "\\wwwroot";
+        static string _folderPath = _simplePath + _folder;
         public static string DefaultImagePath = _folderName + "default.png";
 
         public static string Upload(IFormFile file)
         {
-            CheckImage(Path.GetExtension(file.FileName));
+            string extension = Path.GetExtension(file.FileName);
+            CheckImage(extension);
 
-            string imagePath = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+            string imageName = Guid.NewGuid().ToString() + extension;
 
-            if (!Directory.Exists(_path + _folder)) Directory.CreateDirectory(_path + _folder);
+            if (!Directory.Exists(_folderPath)) Directory.CreateDirectory(_folderPath);
 
-            using (FileStream fileStream = File.Create(_path + _folder + imagePath))
+            using (FileStream fileStream = File.Create(_folderPath + imageName))
             {
                 file.CopyTo(fileStream);
                 fileStream.Flush();
-                return _folderName + imagePath;
+                return _folderName + imageName;
             }
         }
 
@@ -43,7 +44,7 @@ namespace Core.Utilities.Helpers
         public static void Delete(string imagePath)
         {
             DefaultImageCannotBeDeleted(imagePath);
-            File.Delete(_path + imagePath);
+            File.Delete(_simplePath + imagePath);
         }
 
         private static void CheckImage(string extension)
@@ -56,7 +57,7 @@ namespace Core.Utilities.Helpers
 
         private static void DefaultImageCannotBeDeleted(string imagePath)
         {
-            if (imagePath == DefaultImagePath) 
+            if (imagePath == DefaultImagePath)
                 throw new ImageHelperException(CoreMessages.DefaultImageCannotBeDeleted);
         }
     }
