@@ -46,8 +46,8 @@ namespace Business.Concrete
 
         private IResult IsThisCardSavedForThisUser(Payment payment)
         {
-            var payments = _paymentDal.Get(p => p.UserId == payment.UserId&&p.CardNumber==payment.CardNumber);
-            if (payment!=null) return new ErrorResult(Messages.YouAlreadyExistASavedCardWithThisCardNumber);
+            var result = _paymentDal.Get(p => p.UserId == payment.UserId&&p.CardNumber==payment.CardNumber);
+            if (result != null) return new ErrorResult(Messages.YouAlreadyExistASavedCardWithThisCardNumber);
 
             return new SuccessResult();
         }
