@@ -25,7 +25,7 @@ namespace Business.Concrete
         [ValidationAspect(typeof(PaymentValidator))]
         public IResult Add(Payment payment)
         {
-            var result = BusinessRules.Run(IsThisCardRegisteredForThisUser(payment));
+            var result = BusinessRules.Run(IsThisCardSavedForThisUser(payment));
             if (result != null) return result;
 
             _paymentDal.Add(payment);
@@ -44,13 +44,10 @@ namespace Business.Concrete
             return new SuccessResult(Messages.PaymentSuccessful);
         }
 
-        private IResult IsThisCardRegisteredForThisUser(Payment payment)
+        private IResult IsThisCardSavedForThisUser(Payment payment)
         {
-            var payments = _paymentDal.GetAll(p => p.UserId == payment.UserId);
-            if (!payments.Any()) return new SuccessResult();
-
-            var result = payments.SingleOrDefault(p => p.CardNumber == payment.CardNumber);
-            if (result != null) return new ErrorResult(Messages.YouAlreadyExistARegisteredCardWithThisCardNumber);
+            var payments = _paymentDal.Get(p => p.UserId == payment.UserId&&p.CardNumber==payment.CardNumber);
+            if (payment!=null) return new ErrorResult(Messages.YouAlreadyExistASavedCardWithThisCardNumber);
 
             return new SuccessResult();
         }

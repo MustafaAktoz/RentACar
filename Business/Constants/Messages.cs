@@ -37,7 +37,7 @@ namespace Business.Constants
         public static string RentalSuccessful="Kiralama başarılı";
         public static string PasswordChangedSuccessfully="Şifre başarıyla değiştirildi";
         public static string NotEnoughFindeksPoints="Findeks puanı yetersiz";
-        public static string YouAlreadyExistARegisteredCardWithThisCardNumber="Bu kart numarasıyla eşleşen kayıtlı bir kartınız zaten mevcut";
+        public static string YouAlreadyExistASavedCardWithThisCardNumber="Bu kart numarasıyla eşleşen kayıtlı bir kartınız zaten mevcut";
         public static string YearMustBeTwoCharacters = "Yılın son 2 hanesi girilmelidir";
         public static string CvvMustBeThreeCharacters="CVV 3 karakterden oluşmalı";
         public static string CardSaved="Kart başarıyla kaydedildi";
