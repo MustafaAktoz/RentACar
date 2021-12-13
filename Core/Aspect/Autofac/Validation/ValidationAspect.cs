@@ -30,7 +30,7 @@ namespace Core.Aspect.Autofac.Validation
             var entities = invocation.Arguments.Where(e => e.GetType() == entityType);
             foreach (var entity in entities)
             {
-                ValidationTool.Validate(validator, entity);
+                FluentValidationTool.Validate(validator, entity);
             }
         }
     }

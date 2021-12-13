@@ -11,10 +11,10 @@ namespace Core.Utilities.Interceptors
     {
         public IInterceptor[] SelectInterceptors(Type type, MethodInfo method, IInterceptor[] interceptors)
         {
-            var classAttribute = type.GetCustomAttributes<MethodInterceptionBaseAttribute>(true).ToList();
-            var methodAttribute = type.GetMethod(method.Name).GetCustomAttributes<MethodInterceptionBaseAttribute>(true);
-            classAttribute.AddRange(methodAttribute);
-            return classAttribute.OrderBy(x => x.Priority).ToArray();
+            var classAttributes = type.GetCustomAttributes<MethodInterceptionBaseAttribute>(true).ToList();
+            var methodAttributes = type.GetMethod(method.Name).GetCustomAttributes<MethodInterceptionBaseAttribute>(true);
+            classAttributes.AddRange(methodAttributes);
+            return classAttributes.OrderBy(x => x.Priority).ToArray();
         }
     }
 }

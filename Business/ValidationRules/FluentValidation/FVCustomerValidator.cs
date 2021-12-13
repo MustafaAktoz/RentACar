@@ -6,9 +6,9 @@ using System.Text;
 
 namespace Business.ValidationRules.FluentValidation
 {
-    public class CustomerValidator:AbstractValidator<Customer>
+    public class FVCustomerValidator:AbstractValidator<Customer>
     {
-        public CustomerValidator()
+        public FVCustomerValidator()
         {
             RuleFor(c => c.FindeksPoint).GreaterThanOrEqualTo(0);
             RuleFor(c => c.FindeksPoint).LessThanOrEqualTo(1900);

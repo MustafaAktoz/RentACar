@@ -7,9 +7,9 @@ using System.Text;
 
 namespace Business.ValidationRules.FluentValidation
 {
-    public class PaymentValidator:AbstractValidator<Payment>
+    public class FVPaymentValidator:AbstractValidator<Payment>
     {
-        public PaymentValidator()
+        public FVPaymentValidator()
         {
             RuleFor(p => p.CardNumber).Length(16);
             RuleFor(p => p.Year.ToString()).Length(2).WithMessage(Messages.YearMustBeTwoCharacters);

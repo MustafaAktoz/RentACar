@@ -22,7 +22,7 @@ namespace Business.Concrete
             _paymentDal = paymentDal;
         }
 
-        [ValidationAspect(typeof(PaymentValidator))]
+        [ValidationAspect(typeof(FVPaymentValidator))]
         public IResult Add(Payment payment)
         {
             var result = BusinessRules.Run(IsThisCardSavedForThisUser(payment));
@@ -38,7 +38,7 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Payment>>(result,Messages.Listed);
         }
 
-        [ValidationAspect(typeof(PaymentValidator))]
+        [ValidationAspect(typeof(FVPaymentValidator))]
         public IResult Pay(Payment payment)
         {
             return new SuccessResult(Messages.PaymentSuccessful);
