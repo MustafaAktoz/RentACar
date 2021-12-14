@@ -10,11 +10,11 @@ using System.Text;
 
 namespace Core.Aspect.Autofac.Validation
 {
-    public class ValidationAspect:MethodInterception
+    public class FluentValidationAspect:MethodInterception
     {
         Type _validatorType;
 
-        public ValidationAspect(Type validatorType)
+        public FluentValidationAspect(Type validatorType)
         {
             if(!typeof(IValidator).IsAssignableFrom(validatorType))
             {
