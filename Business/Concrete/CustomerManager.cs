@@ -20,7 +20,7 @@ namespace Business.Concrete
             _customerDal = customerDal;
         }
 
-        [ValidationAspect(typeof(FVCustomerValidator))]
+        [FluentValidationAspect(typeof(FVCustomerValidator))]
         public IResult Add(Customer customer)
         {
             _customerDal.Add(customer);
@@ -52,7 +52,7 @@ namespace Business.Concrete
             return new SuccessDataResult<Customer>(result, Messages.Geted);
         }
 
-        [ValidationAspect(typeof(FVCustomerValidator))]
+        [FluentValidationAspect(typeof(FVCustomerValidator))]
         public IResult Update(Customer customer)
         {
             _customerDal.Update(customer);
