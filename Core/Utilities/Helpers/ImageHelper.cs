@@ -12,26 +12,24 @@ namespace Core.Utilities.Helpers
 {
     public class ImageHelper
     {
-        static string _simplePath = Directory.GetCurrentDirectory() + "\\wwwroot";
-        static string _folder = "\\images\\";
-        static string _folderName = _folder.Replace('\\', '/');
-        static string _folderPath = _simplePath + _folder;
-        public static string DefaultImagePath = _folderName + "default.png";
+        static string _basePath = Directory.GetCurrentDirectory() + "/wwwroot/";
+        static string _folder = "images/";
+        public static string DefaultImagePath = _folder + "default.png";
 
         public static string Upload(IFormFile file)
         {
+            if (!Directory.Exists(_basePath + _folder)) Directory.CreateDirectory(_basePath + _folder);
+
             string extension = Path.GetExtension(file.FileName);
             CheckImage(extension);
 
-            string imageName = Guid.NewGuid().ToString() + extension;
+            string imagePath = _folder + Guid.NewGuid().ToString() + extension;
 
-            if (!Directory.Exists(_folderPath)) Directory.CreateDirectory(_folderPath);
-
-            using (FileStream fileStream = File.Create(_folderPath + imageName))
+            using (FileStream fileStream = File.Create(_basePath + imagePath))
             {
                 file.CopyTo(fileStream);
                 fileStream.Flush();
-                return _folderName + imageName;
+                return imagePath;
             }
         }
 
@@ -44,7 +42,7 @@ namespace Core.Utilities.Helpers
         public static void Delete(string imagePath)
         {
             DefaultImageCannotBeDeleted(imagePath);
-            File.Delete(_simplePath + imagePath);
+            File.Delete(_basePath + imagePath);
         }
 
         private static void CheckImage(string extension)
