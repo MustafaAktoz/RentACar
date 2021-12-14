@@ -9,6 +9,7 @@ namespace Business.Abstract
     public interface IPaymentService
     {
         IResult Add(Payment payment);
+        IResult Delete(Payment payment);
         IDataResult<List<Payment>> GetByUserId(int userId);
 
         IResult Pay(Payment payment);

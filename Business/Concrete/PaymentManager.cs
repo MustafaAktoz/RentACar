@@ -32,6 +32,12 @@ namespace Business.Concrete
             return new SuccessResult(Messages.CardSaved);
         }
 
+        public IResult Delete(Payment payment)
+        {
+            _paymentDal.Delete(payment);
+            return new SuccessResult(Messages.Deleted);
+        }
+
         public IDataResult<List<Payment>> GetByUserId(int userId)
         {
             var result= _paymentDal.GetAll(p=>p.UserId== userId);

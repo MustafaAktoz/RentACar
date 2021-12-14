@@ -29,6 +29,15 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
 
+        [HttpPost("delete")]
+        public IActionResult Delete(Payment payment)
+        {
+            var result = _paymentService.Delete(payment);
+            if (!result.Success) return BadRequest(result.Message);
+
+            return Ok(result);
+        }
+
         [HttpGet("getbyuserid")]
         public IActionResult GetByUserId(int userId)
         {
