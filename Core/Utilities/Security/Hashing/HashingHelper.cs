@@ -19,14 +19,11 @@ namespace Core.Utilities.Security.Hashing
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
             {
-                var computeHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+                var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
 
-                for (int i = 0; i < computeHash.Length; i++)
+                for (int i = 0; i < computedHash.Length; i++)
                 {
-                    if (computeHash[i]!=passwordHash[i])
-                    {
-                        return false;
-                    }
+                    if (computedHash[i]!=passwordHash[i]) return false;
                 }
 
                 return true;
