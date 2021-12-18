@@ -28,7 +28,7 @@ namespace Core.Aspect.Autofac.Performance
         {
             if (_stopwatch.Elapsed.TotalSeconds>_interval)
             {
-                Debug.WriteLine($"Performance: {invocation.Method.DeclaringType.FullName}.{invocation.Method.Name} >> {_stopwatch.Elapsed.TotalSeconds}");
+                Debug.WriteLine($"Performans Sorunu: (({invocation.Method.DeclaringType.FullName}.{invocation.Method.Name})) methodu çalışırken, belirtilen '{_interval}' saniyelik süreyi aştı: (({_stopwatch.Elapsed.TotalSeconds})) saniye sürdü...");
             }
             _stopwatch.Reset();
         }
