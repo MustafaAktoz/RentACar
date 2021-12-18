@@ -73,6 +73,12 @@ namespace Business.Concrete
             return new SuccessResult(Messages.Updated);
         }
 
+        public IDataResult<List<RentalDetailDto>> GetRentalDetailsByCustomerId(int customerId)
+        {
+            var result = _rentalDal.GetRentalDetails(r => r.CustomerId == customerId);
+            return new SuccessDataResult<List<RentalDetailDto>>(result,Messages.Listed);
+        }
+
         private IResult CarMustBeDelivered(Rental rental)
         {
             var result = _rentalDal.Get(r => r.CarId == rental.CarId
@@ -142,5 +148,7 @@ namespace Business.Concrete
 
             return new SuccessResult();
         }
+
+
     }
 }

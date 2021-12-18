@@ -7,16 +7,17 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace DataAccess.Concrete.EntityFramework
 {
     public class EfRentalDal:EfEntityRepositoryBase<Rental,CarRentalContext>,IRentalDal
     {
-        public List<RentalDetailDto> GetRentalDetails()
+        public List<RentalDetailDto> GetRentalDetails(Expression<Func<Rental,bool>> filter=null)
         {
             using (CarRentalContext context=new CarRentalContext())
             {
-                var result = from rental in context.Rentals
+                var result = from rental in filter == null ? context.Rentals : context.Rentals.Where(filter)
                              join car in context.Cars
                              on rental.CarId equals car.Id
                              join brand in context.Brands
