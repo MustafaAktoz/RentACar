@@ -22,6 +22,7 @@ namespace Business.Constants
         public static string RegistrationSuccessful = "Kayıt başarılı";
         public static string UserNotFound = "Kullanıcı bulunamadı";
         public static string PasswordIsWrong = "Şifre hatalı";
+        public static string OldPasswordIsWrong ="Eski şifre hatalı";
         public static string LoginSuccessful = "Giriş başarılı";
         public static string UserAlreadyExist = "Kullanıcı zaten var";
         public static string MaximumImageLimitExceeded = "Bu araba için daha fazla resim eklenemez";

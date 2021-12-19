@@ -75,7 +75,7 @@ namespace Business.Concrete
             if (user.Data == null) return new ErrorDataResult<User>(Messages.UserNotFound);
 
             bool result = HashingHelper.VerifyPasswordHash(changePasswordDto.OldPassword, user.Data.PasswordHash, user.Data.PasswordSalt);
-            if (!result) return new ErrorDataResult<User>(Messages.PasswordIsWrong);
+            if (!result) return new ErrorDataResult<User>(Messages.OldPasswordIsWrong);
 
             byte[] passwordHash, passwordSalt;
             HashingHelper.CreatePasswordHash(changePasswordDto.NewPassword, out passwordHash, out passwordSalt);
