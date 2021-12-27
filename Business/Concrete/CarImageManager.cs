@@ -30,7 +30,7 @@ namespace Business.Concrete
         [RemoveCacheAspect("ICarService.Get")]
         public IResult Add(int carId, IFormFile file)
         {
-            var result = BusinessRules.Run(CarExist(carId), ImageLimitForCar(carId));
+            var result = BusinessRules.Run(CheckIfCarExist(carId), CheckIfImageLimitIsExceededForThisCar(carId));
             if (result != null) return result;
 
             CarImage carImage = new CarImage
@@ -78,7 +78,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.Updated);
         }
 
-        private IResult ImageLimitForCar(int carId)
+        private IResult CheckIfImageLimitIsExceededForThisCar(int carId)
         {
             var result = _carImageDal.GetAll(ci => ci.CarId == carId);
             if (result.Count >= 5) return new ErrorResult(Messages.MaximumImageLimitExceeded);
@@ -86,7 +86,7 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
-        private IResult CarExist(int carId)
+        private IResult CheckIfCarExist(int carId)
         {
             var result = _carService.GetById(carId);
             if (result.Data == null) return new ErrorResult(Messages.CarNotFound);
