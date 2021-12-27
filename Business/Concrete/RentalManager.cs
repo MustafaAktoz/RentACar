@@ -105,10 +105,10 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
-        private IResult CheckIfTheLeaseDateIsBeforeNow(DateTime rentDate)
+        private IResult CheckIfTheLeaseDateIsBeforeToday(DateTime rentDate)
         {
-            if (rentDate < DateTime.Now)
-                return new ErrorResult(Messages.RentalDateCannotBeEarlierThanNow);
+            if (rentDate < DateTime.Today)
+                return new ErrorResult(Messages.RentalDateCannotBeBeforeThanToday);
 
             return new SuccessResult();
         }
@@ -116,7 +116,7 @@ namespace Business.Concrete
         private IResult CheckIfTheDeliveryDateIsBeforeTheRentalDate(Rental rental)
         {
             if (rental.RentDate > rental.ReturnDate)
-                return new ErrorResult(Messages.DeliveryDateCannotBeEarlierThanRentalDate);
+                return new ErrorResult(Messages.DeliveryDateCannotBeBeforeThanRentalDate);
 
             return new SuccessResult();
         }
@@ -140,7 +140,7 @@ namespace Business.Concrete
                CheckIfFindeksPointNotEnough(rental.CustomerId, rental.CarId),
                CheckIfTheCarHasBeenDelivered(rental),
                CheckIfTheVehicleIsAlreadyRentedBetweenTheseDates(rental),
-               CheckIfTheLeaseDateIsBeforeNow(rental.RentDate),
+               CheckIfTheLeaseDateIsBeforeToday(rental.RentDate),
                CheckIfTheDeliveryDateIsBeforeTheRentalDate(rental)
                );
 
