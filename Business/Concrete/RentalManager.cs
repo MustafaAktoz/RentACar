@@ -79,7 +79,7 @@ namespace Business.Concrete
             return new SuccessDataResult<List<RentalDetailDto>>(result,Messages.Listed);
         }
 
-        private IResult CarMustBeDelivered(Rental rental)
+        private IResult CheckIfTheCarHasBeenDelivered(Rental rental)
         {
             var result = _rentalDal.Get(r => r.CarId == rental.CarId
             && r.ReturnDate == null
@@ -92,7 +92,7 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
-        private IResult RentDateControl(Rental rental)
+        private IResult CheckIfTheVehicleIsAlreadyRentedBetweenTheseDates(Rental rental)
         {
             var result = _rentalDal.GetAll(r => r.CarId == rental.CarId
             && r.RentDate.Date >= rental.RentDate
@@ -105,7 +105,7 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
-        private IResult NotBefore(DateTime rentDate)
+        private IResult CheckIfTheLeaseDateIsBeforeNow(DateTime rentDate)
         {
             if (rentDate < DateTime.Now)
                 return new ErrorResult(Messages.NotBefore);
@@ -113,7 +113,7 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
-        private IResult NotBeforeRentDate(Rental rental)
+        private IResult CheckIfTheDeliveryDateIsBeforeTheRentalDate(Rental rental)
         {
             if (rental.RentDate > rental.ReturnDate)
                 return new ErrorResult(Messages.NotBeforeRentDate);
@@ -121,7 +121,7 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
-        private IResult FindeksControl(int customerId, int carId)
+        private IResult CheckIfFindeksPointNotEnough(int customerId, int carId)
         {
             var car = _carService.GetById(carId);
             if (!car.Success) return new ErrorResult(car.Message);
@@ -137,11 +137,11 @@ namespace Business.Concrete
         public IResult RulesForAdd(Rental rental)
         {
             var result = BusinessRules.Run(
-               FindeksControl(rental.CustomerId, rental.CarId),
-               CarMustBeDelivered(rental),
-               RentDateControl(rental),
-               NotBefore(rental.RentDate),
-               NotBeforeRentDate(rental)
+               CheckIfFindeksPointNotEnough(rental.CustomerId, rental.CarId),
+               CheckIfTheCarHasBeenDelivered(rental),
+               CheckIfTheVehicleIsAlreadyRentedBetweenTheseDates(rental),
+               CheckIfTheLeaseDateIsBeforeNow(rental.RentDate),
+               CheckIfTheDeliveryDateIsBeforeTheRentalDate(rental)
                );
 
             if (result != null) return result;
