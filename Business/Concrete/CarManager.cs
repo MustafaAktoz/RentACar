@@ -35,7 +35,7 @@ namespace Business.Concrete
         [PerformanceAspect(2)]
         public IResult Add(Car car)
         {
-            var result = BusinessRules.Run(CarNameAlreadyExist(car.Name));
+            var result = BusinessRules.Run(CheckIfCarNameAlreadyExist(car.Name));
             if (result!=null) return result;
 
             _carDal.Add(car);
@@ -69,28 +69,28 @@ namespace Business.Concrete
         public IDataResult<List<CarDetailDto>> GetCarDetails()
         {
             var result = _carDal.GetCarDetails();
-            CarImageControl(result);
+            AddDefaultIfNoCarImageForMultipleData(result);
             return new SuccessDataResult<List<CarDetailDto>>(result,Messages.DetailsGeted+"\n"+Messages.Listed);
         }
 
         public IDataResult<List<CarDetailDto>> GetCarDetailsByBrandId(int brandId)
         {
             var result = _carDal.GetCarDetails(c=>c.BrandId==brandId);
-            CarImageControl(result);
+            AddDefaultIfNoCarImageForMultipleData(result);
             return new SuccessDataResult<List<CarDetailDto>>(result,Messages.DetailsGeted+"\n"+Messages.Filtered);
         }
 
         public IDataResult<List<CarDetailDto>> GetCarDetailsByColorId(int colorId)
         {
             var result = _carDal.GetCarDetails(c => c.ColorId == colorId);
-            CarImageControl(result);
+            AddDefaultIfNoCarImageForMultipleData(result);
             return new SuccessDataResult<List<CarDetailDto>>(result,Messages.DetailsGeted+"\n"+Messages.Filtered);
         }
 
         public IDataResult<CarDetailDto> GetCarDetailById(int id)
         {
             var result = _carDal.GetCarDetail(c=>c.Id==id);
-            CarImageControlForSingleData(result);
+            AddDefaultIfNoCarImageForSingleData(result);
             return new SuccessDataResult<CarDetailDto>(result,Messages.DetailsGeted);
         }
 
@@ -118,7 +118,7 @@ namespace Business.Concrete
         }
 
 
-        private IResult CarNameAlreadyExist(string name)
+        private IResult CheckIfCarNameAlreadyExist(string name)
         {
             var result = _carDal.Get(c => c.Name == name);
             if (result != null) return new ErrorResult(Messages.CarNameAlreadyExist);
@@ -126,7 +126,7 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
-        private IResult CarImageControl(List<CarDetailDto> carDetailDtos)
+        private IResult AddDefaultIfNoCarImageForMultipleData(List<CarDetailDto> carDetailDtos)
         {
             foreach (var carDetailDto in carDetailDtos)
             {
@@ -139,7 +139,7 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
-        private IResult CarImageControlForSingleData(CarDetailDto carDetailDto)
+        private IResult AddDefaultIfNoCarImageForSingleData(CarDetailDto carDetailDto)
         {
             if (!carDetailDto.CarImages.Any())
                 carDetailDto.CarImages.Add(new CarImage { ImagePath = ImageHelper.DefaultImagePath });
