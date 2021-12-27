@@ -29,10 +29,20 @@ namespace WebAPI.Controllers
 
             return Ok(result);            
         }
+
         [HttpPost("update")]
         public IActionResult Update(Rental rental)
         {
             var result = _rentalService.Update(rental);
+            if (!result.Success) return BadRequest(result.Message);
+
+            return Ok(result);
+        }
+
+        [HttpPost("deliver")]
+        public IActionResult Deliver(Rental rental)
+        {
+            var result = _rentalService.Deliver(rental);
             if (!result.Success) return BadRequest(result.Message);
 
             return Ok(result);

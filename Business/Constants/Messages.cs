@@ -33,7 +33,7 @@ namespace Business.Constants
         public static string CarNameAlreadyExist = "Bu isimde bir araba zaten var";
         public static string DateRangeError="Bu tarihler arasında araba zaten kiralanmış";
         public static string RentalDateCannotBeBeforeThanToday = "Zaman makinen yoksa geçmişe araba kiralayamayız :)";
-        public static string DeliveryDateCannotBeBeforeThanRentalDate = "Teslim tarihi kiralama tarihinden önce olamaz";
+        public static string ReturnDateCannotBeBeforeThanRentalDate = "Teslim tarihi, kiralama tarihinden önce olamaz";
         public static string PaymentSuccessful="Ödeme başarılı";
         public static string RentalSuccessful="Kiralama başarılı";
         public static string PasswordChangedSuccessfully="Şifre başarıyla değiştirildi";
@@ -42,5 +42,7 @@ namespace Business.Constants
         public static string NoMoreThanTwoDigitsCanBeEnteredForTheYear = "Yıl için son 2 haneden fazlası girilemez";
         public static string CvvMustBeThreeCharacters="CVV 3 karakterden oluşmalı";
         public static string CardSaved="Kart başarıyla kaydedildi";
+        public static string CarWasDelivered="Araba teslim edildi";
+        public static string CarHasAlreadyBeenDelivered="Araba zaten teslim edilmiş";
     }
 }

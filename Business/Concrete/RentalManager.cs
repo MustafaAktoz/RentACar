@@ -73,6 +73,16 @@ namespace Business.Concrete
             return new SuccessResult(Messages.Updated);
         }
 
+        public IResult Deliver(Rental rental)
+        {
+            var result = BusinessRules.Run(CheckIfReturnDateIsReallyEmpty(rental.ReturnDate));
+            if (result != null) return result;
+
+            rental.ReturnDate = DateTime.Now;
+            _rentalDal.Update(rental);
+            return new SuccessResult(Messages.CarWasDelivered);
+        }
+
         public IDataResult<List<RentalDetailDto>> GetRentalDetailsByCustomerId(int customerId)
         {
             var result = _rentalDal.GetRentalDetails(r => r.CustomerId == customerId);
@@ -87,6 +97,13 @@ namespace Business.Concrete
             {
                 return new ErrorResult(Messages.CanMustBeDelivered);
             }
+
+            return new SuccessResult();
+        }
+
+        private IResult CheckIfReturnDateIsReallyEmpty(DateTime? rentDate)
+        {
+            if (rentDate != null) return new ErrorResult(Messages.CarHasAlreadyBeenDelivered);
 
             return new SuccessResult();
         }
@@ -112,10 +129,10 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
-        private IResult CheckIfTheDeliveryDateIsBeforeTheRentalDate(Rental rental)
+        private IResult CheckIfTheReturnDateIsBeforeTheRentalDate(Rental rental)
         {
             if (rental.RentDate > rental.ReturnDate)
-                return new ErrorResult(Messages.DeliveryDateCannotBeBeforeThanRentalDate);
+                return new ErrorResult(Messages.ReturnDateCannotBeBeforeThanRentalDate);
 
             return new SuccessResult();
         }
@@ -140,7 +157,7 @@ namespace Business.Concrete
                CheckIfTheLeaseDateIsBeforeToday(rental.RentDate),
                CheckIfTheVehicleIsAlreadyRentedBetweenTheseDates(rental),
                CheckIfTheCarHasBeenDelivered(rental),
-               CheckIfTheDeliveryDateIsBeforeTheRentalDate(rental)
+               CheckIfTheReturnDateIsBeforeTheRentalDate(rental)
                );
 
             if (result != null) return result;
@@ -148,6 +165,6 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
-
+        
     }
 }
