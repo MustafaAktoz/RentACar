@@ -92,6 +92,14 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
+        private IResult CheckIfTheLeaseDateIsBeforeToday(DateTime rentDate)
+        {
+            if (rentDate < DateTime.Today)
+                return new ErrorResult(Messages.RentalDateCannotBeBeforeThanToday);
+
+            return new SuccessResult();
+        }
+
         private IResult CheckIfTheVehicleIsAlreadyRentedBetweenTheseDates(Rental rental)
         {
             var result = _rentalDal.GetAll(r => r.CarId == rental.CarId
@@ -101,14 +109,6 @@ namespace Business.Concrete
             {
                 return new ErrorResult(Messages.DateRangeError);
             }
-
-            return new SuccessResult();
-        }
-
-        private IResult CheckIfTheLeaseDateIsBeforeToday(DateTime rentDate)
-        {
-            if (rentDate < DateTime.Today)
-                return new ErrorResult(Messages.RentalDateCannotBeBeforeThanToday);
 
             return new SuccessResult();
         }
@@ -139,8 +139,8 @@ namespace Business.Concrete
             var result = BusinessRules.Run(
                CheckIfFindeksPointNotEnough(rental.CustomerId, rental.CarId),
                CheckIfTheCarHasBeenDelivered(rental),
-               CheckIfTheVehicleIsAlreadyRentedBetweenTheseDates(rental),
                CheckIfTheLeaseDateIsBeforeToday(rental.RentDate),
+               CheckIfTheVehicleIsAlreadyRentedBetweenTheseDates(rental),
                CheckIfTheDeliveryDateIsBeforeTheRentalDate(rental)
                );
 
