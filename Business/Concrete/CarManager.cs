@@ -126,9 +126,9 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
-        private IResult CarImageControl(List<CarDetailDto> carDetailsDto)
+        private IResult CarImageControl(List<CarDetailDto> carDetailDtos)
         {
-            foreach (var carDetailDto in carDetailsDto)
+            foreach (var carDetailDto in carDetailDtos)
             {
                 if (!carDetailDto.CarImages.Any())
                 {
