@@ -31,7 +31,7 @@ namespace Business.Concrete
 
         public IDataResult<User> Register(UserForRegisterDto register)
         {
-            var result = BusinessRules.Run(UserAlreadyExist(register.Email));
+            var result = BusinessRules.Run(CheckIfUserAlreadyExists(register.Email));
             if (result != null) return new ErrorDataResult<User>(result.Message);
 
             byte[] passwordHash, passwordSalt;
@@ -61,7 +61,7 @@ namespace Business.Concrete
 
         }
 
-        private IResult UserAlreadyExist(string email)
+        private IResult CheckIfUserAlreadyExists(string email)
         {
             var result = _userService.GetByEmail(email);
             if (result.Data != null) return new ErrorResult(Messages.UserAlreadyExist);
