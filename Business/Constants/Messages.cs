@@ -32,8 +32,8 @@ namespace Business.Constants
         public static string LowPriceForThisBrand = "Bu marka için düşük bir fiyat girdiniz";
         public static string CarNameAlreadyExist = "Bu isimde bir araba zaten var";
         public static string DateRangeError="Bu tarihler arasında araba zaten kiralanmış";
-        public static string NotBefore="Zaman makinen yoksa geçmişe araba kiralayamayız :)";
-        public static string NotBeforeRentDate="Teslim tarihi kiralama tarihinden önce olamaz";
+        public static string RentalDateCannotBeEarlierThanNow = "Zaman makinen yoksa geçmişe araba kiralayamayız :)";
+        public static string DeliveryDateCannotBeEarlierThanRentalDate = "Teslim tarihi kiralama tarihinden önce olamaz";
         public static string PaymentSuccessful="Ödeme başarılı";
         public static string RentalSuccessful="Kiralama başarılı";
         public static string PasswordChangedSuccessfully="Şifre başarıyla değiştirildi";

@@ -108,7 +108,7 @@ namespace Business.Concrete
         private IResult CheckIfTheLeaseDateIsBeforeNow(DateTime rentDate)
         {
             if (rentDate < DateTime.Now)
-                return new ErrorResult(Messages.NotBefore);
+                return new ErrorResult(Messages.RentalDateCannotBeEarlierThanNow);
 
             return new SuccessResult();
         }
@@ -116,7 +116,7 @@ namespace Business.Concrete
         private IResult CheckIfTheDeliveryDateIsBeforeTheRentalDate(Rental rental)
         {
             if (rental.RentDate > rental.ReturnDate)
-                return new ErrorResult(Messages.NotBeforeRentDate);
+                return new ErrorResult(Messages.DeliveryDateCannotBeEarlierThanRentalDate);
 
             return new SuccessResult();
         }
