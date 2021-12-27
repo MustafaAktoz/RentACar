@@ -82,8 +82,7 @@ namespace Business.Concrete
         private IResult CheckIfTheCarHasBeenDelivered(Rental rental)
         {
             var result = _rentalDal.Get(r => r.CarId == rental.CarId
-            && r.ReturnDate == null
-            && r.RentDate <= rental.ReturnDate);
+            && r.ReturnDate == null);
             if (result != null)
             {
                 return new ErrorResult(Messages.CanMustBeDelivered);
@@ -138,9 +137,9 @@ namespace Business.Concrete
         {
             var result = BusinessRules.Run(
                CheckIfFindeksPointNotEnough(rental.CustomerId, rental.CarId),
-               CheckIfTheCarHasBeenDelivered(rental),
                CheckIfTheLeaseDateIsBeforeToday(rental.RentDate),
                CheckIfTheVehicleIsAlreadyRentedBetweenTheseDates(rental),
+               CheckIfTheCarHasBeenDelivered(rental),
                CheckIfTheDeliveryDateIsBeforeTheRentalDate(rental)
                );
 
