@@ -86,17 +86,17 @@ namespace Business.Concrete
         public IDataResult<List<RentalDetailDto>> GetRentalDetailsByCustomerId(int customerId)
         {
             var result = _rentalDal.GetRentalDetails(r => r.CustomerId == customerId);
-            return new SuccessDataResult<List<RentalDetailDto>>(result,Messages.Listed);
+            return new SuccessDataResult<List<RentalDetailDto>>(result, Messages.Listed);
         }
 
         private IResult CheckIfTheCarHasBeenDelivered(Rental rental)
         {
-            var result = _rentalDal.Get(r => r.CarId == rental.CarId
+            var result = _rentalDal.Get(r => r.CarId == rental.CarId 
             && r.ReturnDate == null);
+
             if (result != null)
-            {
-                return new ErrorResult(Messages.CanMustBeDelivered);
-            }
+                if (rental.ReturnDate == null || rental.ReturnDate > result.RentDate)
+                    return new ErrorResult(Messages.CanMustBeDelivered);
 
             return new SuccessResult();
         }
@@ -165,6 +165,6 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
-        
+
     }
 }
