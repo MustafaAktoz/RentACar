@@ -54,10 +54,13 @@ namespace Business.DependencyResolvers.Autofac
                 }).SingleInstance();
 
             
-            /*Autofacın IoC yapısı içinde dependencyler altına yazdığımız bu kod, gidip çalıştırılmak istetenen tüm methodlar ve classlar için AspectInterceptorSelectorü 
-            çalıştıracak ve AspectInterceptorSelectorde IInterceptorSelector yapısı sayesinde o an çalıştırıldığı classın/methodun üzerine bakıp bulduğu 
-            tüm MethodInterceptionBaseAttributeleri aspectlerin öncelik sırasına göre çalıştıracak. MethodInterceptionBaseAttribute de zaten IInterceptor özelliği sayesinde 
-            üzerine attribüte olarak atandığı method yerine kendi içerisindeki intercept methodunu çalıştıracak. */
+            /*Dependencyler altına yazdığımız bu kod, gidip çalıştırılmak istetenen tüm classlar için AspectInterceptorSelector'ü 
+            çalıştırıyor ve AspectInterceptorSelector'de IInterceptorSelector yapısı sayesinde o an uğruna çalıştırıldığı classın üzerine bakıp varsa bulduğu 
+            tüm MethodInterceptionBaseAttributeler'i bir listeye atıyor, sonra bu class içerisinde içerisinde çalışıtırılmak istenen tüm methodların üzerine de 
+            bakıyor ve hiç ayrım yapmadan bulduğu tüm MethodInterceptionBaseAttributeler'i ilk oluşturduğu listede topluyor ve hepsini öncelik sırasına göre
+            arraye çevirip döndürüyor, Autofac'te bunları sırasıyla çalıştırıyor.
+            MethodInterceptionBaseAttribute'de zaten IInterceptor özelliği sayesinde, üzerine attribüte olarak atandığı method yerine kendi içerisindeki 
+            intercept methodunu çalıştırıyor. */
         }
     }
 }
